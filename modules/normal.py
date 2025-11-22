@@ -2,12 +2,11 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MinMaxScaler
 import pandas as pd
 import joblib
 
-def normalizar(df):
-    scaler = MinMaxScaler()
+def normalizar(df, scaler):
     num_cols = df.select_dtypes(include=["int64", "float64"]).columns
     dfNormalized = scaler.fit_transform(df[num_cols])
     dfNormalized = pd.DataFrame(dfNormalized, columns=num_cols, index=df.index)
-    joblib.dump(scaler, "scaler.pkl")
+    joblib.dump(scaler, "./data/scaler.pkl")
     return dfNormalized
 
 def OHE(df, column_name):
@@ -25,10 +24,3 @@ def le_encode(df, column_name):
     le = LabelEncoder()
     df[column_name] = le.fit_transform(df[column_name])
     return df[column_name]
-
-def normalizarNewData(df):
-    scaler = joblib.load("scaler.pkl")
-    num_cols = df.select_dtypes(include=["int64", "float64"]).columns
-    dfNormalized = scaler.transform(df[num_cols])
-    dfNormalized = pd.DataFrame(dfNormalized, columns=num_cols, index=df.index)
-    return dfNormalized
